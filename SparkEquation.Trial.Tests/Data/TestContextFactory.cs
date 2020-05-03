@@ -1,7 +1,7 @@
 ﻿using SparkEquation.Trial.WebAPI.Data;
 using SparkEquation.Trial.WebAPI.Data.Factory;
 
-namespace SparkEquation.Trial.Tests
+namespace SparkEquation.Trial.Tests.Data
 {
     public class TestContextFactory : IContextFactory
     {

@@ -84,8 +84,8 @@ namespace SparkEquation.Trial.WebAPI.Services
 
         private async Task UpdateProductCategories(MainDbContext context, Product oldProduct,Product newProduct)
         {
-            var newCategories = newProduct.CategoryProducts.Select(x => x.CategoryId).OrderBy(x => x);
-            var oldCategories = oldProduct.CategoryProducts.Select(x => x.CategoryId).OrderBy(x => x);
+            var newCategories = newProduct.GetSortedCategories();
+            var oldCategories = oldProduct.GetSortedCategories();
             if (newCategories.SequenceEqual(oldCategories))
             {
                 return;

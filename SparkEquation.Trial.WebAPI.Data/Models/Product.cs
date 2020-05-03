@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace SparkEquation.Trial.WebAPI.Data.Models
 {
@@ -23,6 +24,12 @@ namespace SparkEquation.Trial.WebAPI.Data.Models
         public Brand Brand { get; set; }
 
         public IList<CategoryProduct> CategoryProducts { get; set; }
+
+        public IOrderedEnumerable<int> GetSortedCategories()
+        {
+            return this.CategoryProducts.Select(x => x.CategoryId).OrderBy(x => x);
+        }
+
 
         public void CopyDataFrom(Product newProduct)
         {
