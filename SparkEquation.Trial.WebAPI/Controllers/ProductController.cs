@@ -43,7 +43,7 @@ namespace SparkEquation.Trial.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]ProductDto product)
         {
-            if (!await ValidateModel(product))
+            if (!await ValidateModel(product, false))
             {
                 return new BadRequestObjectResult(ModelState);
             }
@@ -51,7 +51,7 @@ namespace SparkEquation.Trial.WebAPI.Controllers
             return new JsonResult(createdProduct);
         }
 
-        private async Task<bool> ValidateModel(ProductDto product)
+        private async Task<bool> ValidateModel(ProductDto product, bool isIdRequired)
         {
             if (!ModelState.IsValid)
             {
@@ -67,9 +67,14 @@ namespace SparkEquation.Trial.WebAPI.Controllers
                 }
                 return false;
             }
+            if (isIdRequired && product.Id == null)
+            {
+                ModelState.AddModelError(nameof(product.Id), "id required for update");
+                return false;
+            }
             if (!await _productsService.CheckBrand(product.BrandId.Value))
             {
-                ModelState.AddModelError(nameof(product.BrandId), "Invalid BrandId");
+                ModelState.AddModelError(nameof(product.BrandId), "Invalid brand");
                 return false;
             }
             if (!_productsService.CheckCategories(product.CategoryProducts))
@@ -83,7 +88,7 @@ namespace SparkEquation.Trial.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody]ProductDto product)
         {
-            if (!await ValidateModel(product))
+            if (!await ValidateModel(product, true))
             {
                 return new BadRequestObjectResult(ModelState);
             }
