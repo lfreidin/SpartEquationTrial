@@ -67,22 +67,13 @@ namespace SparkEquation.Trial.WebAPI.Services
                 SetFeatured(newProduct);                
                 existingProduct.CopyDataFrom(newProduct);
                 context.Entry(existingProduct).State = EntityState.Modified;
-                if (context.AreTransactionsSupported())
-                {
-                    context.Database.BeginTransaction();
-                }
-                var productSaveTask = context.SaveChangesAsync();
-                var categoriesSaveTask = UpdateProductCategories(context, existingProduct, newProduct);
-                if (context.AreTransactionsSupported())
-                {
-                    Task.WaitAll(productSaveTask, categoriesSaveTask);
-                    context.Database.CommitTransaction();
-                }
+                UpdateProductCategories(context, existingProduct, newProduct);
+                await context.SaveChangesAsync();
                 return existingProduct;
             }
         }
 
-        private async Task UpdateProductCategories(MainDbContext context, Product oldProduct,Product newProduct)
+        private void UpdateProductCategories(MainDbContext context, Product oldProduct,Product newProduct)
         {
             var newCategories = newProduct.GetSortedCategories();
             var oldCategories = oldProduct.GetSortedCategories();
@@ -95,7 +86,6 @@ namespace SparkEquation.Trial.WebAPI.Services
             context.CategoryProducts
                 .AddRange(newCategories
                 .Select(x => new CategoryProduct() { ProductId = oldProduct.Id, CategoryId = x }));
-            await context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)

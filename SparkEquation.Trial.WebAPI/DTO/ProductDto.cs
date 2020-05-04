@@ -31,7 +31,10 @@ namespace SparkEquation.Trial.WebAPI
         public Product ToModel()
         {
             var product = new Product();
-            product.Id = Id.Value;
+            if (Id != null)
+            {
+                product.Id = Id.Value;
+            }
             product.Name = Name;
             product.Featured = Featured.Value;
             product.ExpirationDate = ExpirationDate;
@@ -40,7 +43,7 @@ namespace SparkEquation.Trial.WebAPI
             product.Rating = Rating.Value;
             product.BrandId = BrandId.Value;
             product.CategoryProducts = CategoryProducts
-                .Select(x => new CategoryProduct() { CategoryId = x, ProductId = Id.Value })
+                .Select(x => new CategoryProduct() { CategoryId = x, ProductId = Id ?? 0})
                 .ToList();
             return product;
         }

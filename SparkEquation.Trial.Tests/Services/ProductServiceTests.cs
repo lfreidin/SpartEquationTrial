@@ -21,6 +21,7 @@ namespace SparkEquation.Trial.Tests
             product = await CreateProduct(1000);
             var loadedProduct = await productService.GetProductAsync(product.Id);
             Assert.IsNotNull(loadedProduct);
+            Assert.AreEqual(1, loadedProduct.CategoryProducts.Count);
         }
 
         private async Task<Product> CreateProduct(int id)

@@ -5,10 +5,6 @@ namespace SparkEquation.Trial.WebAPI.Data
 {
     public partial class MainDbContext : DbContext
     {
-        public virtual bool AreTransactionsSupported()
-        {
-            return true;
-        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=./../SparkEquation.Trial.WebAPI/products.db");

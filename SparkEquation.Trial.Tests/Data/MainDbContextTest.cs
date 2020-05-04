@@ -9,11 +9,5 @@ namespace SparkEquation.Trial.Tests.Data
         {
             optionsBuilder.UseInMemoryDatabase("SpartEquation");
         }
-
-        public override bool AreTransactionsSupported()
-        {
-            return false;
-        }
-
     }
 }
